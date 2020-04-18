@@ -25,9 +25,10 @@
 
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header">Create New %%modelName%%</div>
+                            <div class="card-header">Edit Book #{{ $book->id }}
+                            </div>
                             <div class="card-body">
-                                <a href="{{ url('/%%routeGroup%%%%viewName%%') }}" title="Back"><button
+                                <a href="{{ url('/admin/books') }}" title="Back"><button
                                         class="btn btn-warning btn-sm"><i class="fa fa-arrow-left"
                                             aria-hidden="true"></i> Back</button></a>
                                 <br />
@@ -41,11 +42,13 @@
                                 </ul>
                                 @endif
 
-                                <form method="POST" action="{{ url('/%%routeGroup%%%%viewName%%') }}"
+                                <form method="POST"
+                                    action="{{ url('/admin/books/' . $book->id) }}"
                                     accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                                    {{ method_field('PATCH') }}
                                     {{ csrf_field() }}
 
-                                    @include ('%%viewTemplateDir%%.form', ['formMode' => 'create'])
+                                    @include ('admin.books.form', ['formMode' => 'edit'])
 
                                 </form>
 
@@ -57,4 +60,5 @@
         </div>
     </section>
 </div>
+
 @endsection
