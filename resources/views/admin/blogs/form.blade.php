@@ -8,6 +8,11 @@
     <textarea class="form-control" rows="5" name="content" type="textarea" id="content" >{{ isset($blog->content) ? $blog->content : ''}}</textarea>
     {!! $errors->first('content', '<p class="help-block">:message</p>') !!}
 </div>
+<div class="form-group {{ $errors->has('image') ? 'has-error' : ''}}">
+    <label for="image" class="control-label">{{ 'Image' }}</label>
+    <input class="form-control" name="image" type="file" id="image" value="{{ isset($blog->image) ? $blog->image : ''}}" >
+    {!! $errors->first('image', '<p class="help-block">:message</p>') !!}
+</div>
 <div class="form-group {{ $errors->has('category') ? 'has-error' : ''}}">
     <label for="category" class="control-label">{{ 'Category' }}</label>
     <select name="category" class="form-control" id="category" >

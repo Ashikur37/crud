@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
     <div class="container">
         <div class="row">
-            @include('admin.sidebar')
 
-            <div class="col-md-9">
+
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">Blog {{ $blog->id }}</div>
                     <div class="card-body">
@@ -27,7 +27,7 @@
                                     <tr>
                                         <th>ID</th><td>{{ $blog->id }}</td>
                                     </tr>
-                                    <tr><th> Title </th><td> {{ $blog->title }} </td></tr><tr><th> Content </th><td> {{ $blog->content }} </td></tr><tr><th> Category </th><td> {{ $blog->category }} </td></tr><tr><th> User Id </th><td> {{ $blog->user_id }} </td></tr>
+                                    <tr><th> Title </th><td> {{ $blog->title }} </td></tr><tr><th> Content </th><td> {{ $blog->content }} </td></tr><tr><th> Image </th><td> {{ $blog->image }} </td></tr><tr><th> Category </th><td> {{ $blog->category }} </td></tr>
                                 </tbody>
                             </table>
                         </div>

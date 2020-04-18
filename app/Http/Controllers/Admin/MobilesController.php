@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Controllers\Controller;
 
-use App\Post;
+use App\Mobile;
 use Illuminate\Http\Request;
 use DataTables;
 use Illuminate\Support\Facades\URL;
-class PostsController extends Controller
+class MobilesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,12 +20,12 @@ class PostsController extends Controller
     {
 
             if ($request->ajax()) {
-            $data = Post::latest()->get();
+            $data = Mobile::latest()->get();
                 return Datatables::of($data)
                         ->addIndexColumn()
                         ->addColumn('action', function($row){
 
-                               $btn = '<div class="btn-group"><a href="'.URL::to('/').'/posts/'.$row->id.'/edit" class="btn btn-sm btn-outline-primary">Edit</a>
+                               $btn = '<div class="btn-group"><a href="'.URL::to('/').'/admin/mobiles/'.$row->id.'/edit" class="btn btn-sm btn-outline-primary">Edit</a>
                                <button onclick="deleteData('.$row->id.')" class="btn btn-sm btn-outline-danger">Delete</button></div>';
 
                                 return $btn;
@@ -37,7 +37,7 @@ class PostsController extends Controller
 
                    }
      
-                    return view('admin.posts.index');
+                    return view('admin.mobiles.index');
 
 
     }
@@ -49,7 +49,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        return view('admin.mobiles.create');
     }
 
     /**
@@ -65,10 +65,14 @@ class PostsController extends Controller
 			'title' => 'required|max:10'
 		]);
         $requestData = $request->all();
-        
-        Post::create($requestData);
+                if ($request->hasFile('image')) {
+            $requestData['image'] = $request->file('image')
+                ->store('uploads', 'public');
+        }
 
-        return redirect('admin/posts')->with('flash_message', 'Post added!');
+        Mobile::create($requestData);
+
+        return redirect('admin/mobiles')->with('flash_message', 'Mobile added!');
     }
 
     /**
@@ -80,9 +84,9 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        $post = Post::findOrFail($id);
+        $mobile = Mobile::findOrFail($id);
 
-        return view('admin.posts.show', compact('post'));
+        return view('admin.mobiles.show', compact('mobile'));
     }
 
     /**
@@ -94,9 +98,9 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        $post = Post::findOrFail($id);
+        $mobile = Mobile::findOrFail($id);
 
-        return view('admin.posts.edit', compact('post'));
+        return view('admin.mobiles.edit', compact('mobile'));
     }
 
     /**
@@ -113,11 +117,15 @@ class PostsController extends Controller
 			'title' => 'required|max:10'
 		]);
         $requestData = $request->all();
-        
-        $post = Post::findOrFail($id);
-        $post->update($requestData);
+                if ($request->hasFile('image')) {
+            $requestData['image'] = $request->file('image')
+                ->store('uploads', 'public');
+        }
 
-        return redirect('admin/posts')->with('flash_message', 'Post updated!');
+        $mobile = Mobile::findOrFail($id);
+        $mobile->update($requestData);
+
+        return redirect('admin/mobiles')->with('flash_message', 'Mobile updated!');
     }
 
     /**
@@ -129,8 +137,8 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        Post::destroy($id);
+        Mobile::destroy($id);
 
-        return redirect('admin/posts')->with('flash_message', 'Post deleted!');
+        return redirect('admin/mobiles')->with('flash_message', 'Mobile deleted!');
     }
 }

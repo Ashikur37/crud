@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Controllers\Controller;
 
-use App\Book;
+use App\Product;
 use Illuminate\Http\Request;
 use DataTables;
 use Illuminate\Support\Facades\URL;
-class BookController extends Controller
+class ProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,12 +20,12 @@ class BookController extends Controller
     {
 
             if ($request->ajax()) {
-            $data = Book::latest()->get();
+            $data = Product::latest()->get();
                 return Datatables::of($data)
                         ->addIndexColumn()
                         ->addColumn('action', function($row){
 
-                               $btn = '<div class="btn-group"><a href="'.URL::to('/').'/admin/book/'.$row->id.'/edit" class="btn btn-sm btn-outline-primary">Edit</a>
+                               $btn = '<div class="btn-group"><a href="'.URL::to('/').'/admin/products/'.$row->id.'/edit" class="btn btn-sm btn-outline-primary">Edit</a>
                                <button onclick="deleteData('.$row->id.')" class="btn btn-sm btn-outline-danger">Delete</button></div>';
 
                                 return $btn;
@@ -37,7 +37,7 @@ class BookController extends Controller
 
                    }
      
-                    return view('admin.book.index');
+                    return view('admin.products.index');
 
 
     }
@@ -49,7 +49,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        return view('admin.book.create');
+        return view('admin.products.create');
     }
 
     /**
@@ -65,10 +65,14 @@ class BookController extends Controller
 			'title' => 'required|max:10'
 		]);
         $requestData = $request->all();
-        
-        Book::create($requestData);
+                if ($request->hasFile('image')) {
+            $requestData['image'] = $request->file('image')
+                ->store('uploads', 'public');
+        }
 
-        return redirect('admin/book')->with('flash_message', 'Book added!');
+        Product::create($requestData);
+
+        return redirect('admin/products')->with('flash_message', 'Product added!');
     }
 
     /**
@@ -80,9 +84,9 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        $book = Book::findOrFail($id);
+        $product = Product::findOrFail($id);
 
-        return view('admin.book.show', compact('book'));
+        return view('admin.products.show', compact('product'));
     }
 
     /**
@@ -94,9 +98,9 @@ class BookController extends Controller
      */
     public function edit($id)
     {
-        $book = Book::findOrFail($id);
+        $product = Product::findOrFail($id);
 
-        return view('admin.book.edit', compact('book'));
+        return view('admin.products.edit', compact('product'));
     }
 
     /**
@@ -113,11 +117,15 @@ class BookController extends Controller
 			'title' => 'required|max:10'
 		]);
         $requestData = $request->all();
-        
-        $book = Book::findOrFail($id);
-        $book->update($requestData);
+                if ($request->hasFile('image')) {
+            $requestData['image'] = $request->file('image')
+                ->store('uploads', 'public');
+        }
 
-        return redirect('admin/book')->with('flash_message', 'Book updated!');
+        $product = Product::findOrFail($id);
+        $product->update($requestData);
+
+        return redirect('admin/products')->with('flash_message', 'Product updated!');
     }
 
     /**
@@ -129,8 +137,8 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        Book::destroy($id);
+        Product::destroy($id);
 
-        return redirect('admin/book')->with('flash_message', 'Book deleted!');
+        return redirect('admin/products')->with('flash_message', 'Product deleted!');
     }
 }

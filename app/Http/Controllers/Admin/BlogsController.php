@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Controllers\Controller;
 
 use App\Blog;
 use Illuminate\Http\Request;
@@ -30,7 +30,7 @@ class BlogsController extends Controller
 
                                 return $btn;
                         })
-
+                        ->editColumn('image', '<img style="width:100px" src="'.URL::to('/').'/storage/{{$image}}">')
                         ->rawColumns(['action'])
                         ->escapeColumns([])
                         ->make(true);
@@ -65,7 +65,11 @@ class BlogsController extends Controller
 			'title' => 'required|max:10'
 		]);
         $requestData = $request->all();
-        
+                if ($request->hasFile('image')) {
+            $requestData['image'] = $request->file('image')
+                ->store('uploads', 'public');
+        }
+
         Blog::create($requestData);
 
         return redirect('admin/blogs')->with('flash_message', 'Blog added!');
@@ -113,7 +117,11 @@ class BlogsController extends Controller
 			'title' => 'required|max:10'
 		]);
         $requestData = $request->all();
-        
+                if ($request->hasFile('image')) {
+            $requestData['image'] = $request->file('image')
+                ->store('uploads', 'public');
+        }
+
         $blog = Blog::findOrFail($id);
         $blog->update($requestData);
 

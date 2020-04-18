@@ -35,7 +35,7 @@
                                 <table class="table table-bordered data-table">
                                         <thead>
                                              <tr>
-                                                 <th>#</th><th>Title</th><th>Content</th><th>Category</th><th>User Id</th><th>Actions</th>
+                                                 <th>#</th><th>Title</th><th>Content</th><th>Image</th><th>Category</th><th>Actions</th>
                                           
                                             </tr>
                                         </thead>
@@ -52,6 +52,11 @@
 @section('script')
 <script src="{{asset('admin/plugins/datatables/jquery.dataTables.js')}}"></script>
 <script src="{{asset('admin/plugins/datatables-bs4/js/dataTables.bootstrap4.js')}}"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
 <script type="text/javascript">
  
     deleteData=(id)=>{
@@ -61,11 +66,34 @@
     $(function () {
       
       var table = $('.data-table').DataTable({
+           dom: 'Bfrtip',
+       buttons: [
+      {
+        text: 'Excel',
+        extend: 'excelHtml5',
+        exportOptions: {
+          columns: [1,2,3]
+        }
+      }, {
+        text: 'CSV',
+        extend: 'csvHtml5',
+        exportOptions: {
+          columns: [1,2,3]
+        }
+      }, {
+        text: 'pdf',
+        extend: 'pdfHtml5',
+        exportOptions: {
+          columns: [1,2,3]
+        }
+      }
+    ],
           processing: true,
           serverSide: true,
           ajax: "{{ url('/admin/blogs') }}",
           columns: [
-              {data: 'title', name: 'title'},{data: 'content', name: 'content'},{data: 'category', name: 'category'},{data: 'user_id', name: 'user_id'},
+              {data: 'id', name: 'id'},
+              {data: 'title', name: 'title'},{data: 'content', name: 'content'},{data: 'image', name: 'image'},{data: 'category', name: 'category'},
               {data: 'action', name: 'action', orderable: false, searchable: false},
           ]
       });

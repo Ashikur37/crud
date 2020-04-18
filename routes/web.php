@@ -22,9 +22,3 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
-Route::resource('admin/posts', 'Admin\\PostsController');
-
-Route::resource('admin/books', 'Admin\\BooksController');
-Route::resource('admin/book', 'Admin\\BookController');
-Route::resource('admin/blogs', 'Admin\\BlogsController');
